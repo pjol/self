@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: BUSL-1.1
 // NOTE: Converts to Apache-2.0 on 2029-06-11 per LICENSE.
 
-export type { PassportData } from '@selfxyz/common/utils/types';
+import { DocumentCatalog, PassportData } from '@selfxyz/common/utils/types';
+
 export type { PassportValidationCallbacks } from '../validation/document';
 export interface Config {
   endpoints?: { api?: string; teeWs?: string; artifactsCdn?: string };
@@ -91,6 +92,7 @@ export interface Adapters {
   clock: ClockAdapter;
   logger: LoggerAdapter;
   analytics: AnalyticsAdapter;
+  documents: DocumentsAdapter;
 }
 
 export interface ProofHandle {
@@ -148,6 +150,12 @@ export type ScanResult =
 export interface ScannerAdapter {
   scan(opts: ScanOpts & { signal?: AbortSignal }): Promise<ScanResult>;
 }
+
+export interface DocumentsAdapter {
+  loadDocumentCatalog(): Promise<DocumentCatalog>;
+  loadDocumentById(id: string): Promise<PassportData | null>;
+}
+
 export interface SelfClient {
   scanDocument(opts: ScanOpts & { signal?: AbortSignal }): Promise<ScanResult>;
   validateDocument(input: ValidationInput): Promise<ValidationResult>;
@@ -165,6 +173,9 @@ export interface SelfClient {
   trackEvent(event: string, payload?: TrackEventParams): void;
   on<E extends SDKEvent>(event: E, cb: (payload: SDKEventMap[E]) => void): Unsubscribe;
   emit<E extends SDKEvent>(event: E, payload: SDKEventMap[E]): void;
+
+  loadDocumentCatalog(): Promise<DocumentCatalog>;
+  loadDocumentById(id: string): Promise<PassportData | null>;
 }
 export type Unsubscribe = () => void;
 export interface StorageAdapter {

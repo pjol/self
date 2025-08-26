@@ -25,7 +25,10 @@ import { CircleHelp } from '@tamagui/lucide-icons';
 import type { PassportData } from '@selfxyz/common/types';
 import { getSKIPEM } from '@selfxyz/common/utils/csca';
 import { initPassportDataParsing } from '@selfxyz/common/utils/passports';
-import { useSelfClient } from '@selfxyz/mobile-sdk-alpha';
+import {
+  hasAnyValidRegisteredDocument,
+  useSelfClient,
+} from '@selfxyz/mobile-sdk-alpha';
 import { PassportEvents } from '@selfxyz/mobile-sdk-alpha/constants/analytics';
 
 import passportVerifyAnimation from '@/assets/animations/passport_verify.json';
@@ -52,7 +55,6 @@ import {
   impactLight,
 } from '@/utils/haptic';
 import { parseScanResponse, scan } from '@/utils/nfcScanner';
-import { hasAnyValidRegisteredDocument } from '@/utils/proving/validateDocument';
 import { sanitizeErrorMessage } from '@/utils/utils';
 
 const emitter =
@@ -75,7 +77,8 @@ type PassportNFCScanRoute = RouteProp<
 >;
 
 const PassportNFCScanScreen: React.FC = () => {
-  const { trackEvent } = useSelfClient();
+  const selfClient = useSelfClient();
+  const { trackEvent } = selfClient;
   const navigation = useNavigation();
   const route = useRoute<PassportNFCScanRoute>();
   const { showModal } = useFeedback();
@@ -373,7 +376,7 @@ const PassportNFCScanScreen: React.FC = () => {
   });
 
   const onCancelPress = async () => {
-    const hasValidDocument = await hasAnyValidRegisteredDocument();
+    const hasValidDocument = await hasAnyValidRegisteredDocument(selfClient);
     if (hasValidDocument) {
       navigateToHome();
     } else {

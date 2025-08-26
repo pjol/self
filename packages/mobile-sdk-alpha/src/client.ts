@@ -47,6 +47,8 @@ const optionalDefaults: Partial<Adapters> = {
   },
 };
 
+const REQUIRED_ADAPTERS = ['scanner', 'network', 'crypto', 'documents'] as const;
+
 /**
  * Creates a fully configured {@link SelfClient} instance.
  *
@@ -56,9 +58,9 @@ const optionalDefaults: Partial<Adapters> = {
  */
 export function createSelfClient({ config, adapters }: { config: Config; adapters: Partial<Adapters> }): SelfClient {
   const cfg = mergeConfig(defaultConfig, config);
-  const required: (keyof Adapters)[] = ['scanner', 'network', 'crypto'];
-  for (const name of required) {
-    if (!(name in adapters) || !adapters[name]) throw notImplemented(name);
+
+  for (const name of REQUIRED_ADAPTERS) {
+    if (!(name in adapters) || !adapters[name as keyof Adapters]) throw notImplemented(name);
   }
 
   const _adapters = { ...optionalDefaults, ...adapters } as Adapters;
@@ -136,5 +138,13 @@ export function createSelfClient({ config, adapters }: { config: Config; adapter
     extractMRZInfo: parseMRZInfo,
     on,
     emit,
+
+    // TODO: inline for now
+    loadDocumentCatalog: async () => {
+      return _adapters.documents.loadDocumentCatalog();
+    },
+    loadDocumentById: async (id: string) => {
+      return _adapters.documents.loadDocumentById(id);
+    },
   };
 }

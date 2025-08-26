@@ -11,6 +11,10 @@ import type { RouteProp } from '@react-navigation/native';
 
 import { countryCodes } from '@selfxyz/common/constants';
 import type { PassportData } from '@selfxyz/common/types';
+import {
+  hasAnyValidRegisteredDocument,
+  useSelfClient,
+} from '@selfxyz/mobile-sdk-alpha';
 import { PassportEvents } from '@selfxyz/mobile-sdk-alpha/constants/analytics';
 
 import { PrimaryButton } from '@/components/buttons/PrimaryButton';
@@ -23,7 +27,6 @@ import analytics from '@/utils/analytics';
 import { black, slate500, white } from '@/utils/colors';
 import { sendCountrySupportNotification } from '@/utils/email';
 import { notificationError } from '@/utils/haptic';
-import { hasAnyValidRegisteredDocument } from '@/utils/proving/validateDocument';
 
 const { flush: flushAnalytics } = analytics();
 
@@ -43,6 +46,7 @@ interface UnsupportedPassportScreenProps {
 const UnsupportedPassportScreen: React.FC<UnsupportedPassportScreenProps> = ({
   route,
 }) => {
+  const selfClient = useSelfClient();
   const navigateToLaunch = useHapticNavigation('Launch');
   const navigateToHome = useHapticNavigation('Home');
   const passportData = route.params?.passportData;
@@ -101,7 +105,7 @@ const UnsupportedPassportScreen: React.FC<UnsupportedPassportScreenProps> = ({
   const CountryFlagComponent = getCountryFlag(country2AlphaCode);
 
   const onDismiss = async () => {
-    const hasValidDocument = await hasAnyValidRegisteredDocument();
+    const hasValidDocument = await hasAnyValidRegisteredDocument(selfClient);
     if (hasValidDocument) {
       navigateToHome();
     } else {

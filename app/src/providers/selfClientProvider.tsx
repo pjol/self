@@ -12,6 +12,7 @@ import {
 } from '@selfxyz/mobile-sdk-alpha';
 import { TrackEventParams } from '@selfxyz/mobile-sdk-alpha';
 
+import { selfClientDocumentsAdapter } from '@/providers/passportDataProvider';
 import analytics from '@/utils/analytics';
 
 /**
@@ -53,6 +54,7 @@ export const SelfClientProvider = ({ children }: PropsWithChildren) => {
           },
         },
       },
+      documents: selfClientDocumentsAdapter,
       crypto: {
         async hash(
           data: Uint8Array,

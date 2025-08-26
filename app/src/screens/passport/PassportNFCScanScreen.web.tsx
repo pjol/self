@@ -5,6 +5,10 @@
 import React from 'react';
 import { Image } from 'tamagui';
 
+import {
+  hasAnyValidRegisteredDocument,
+  useSelfClient,
+} from '@selfxyz/mobile-sdk-alpha';
 import { PassportEvents } from '@selfxyz/mobile-sdk-alpha/constants/analytics';
 
 import { SecondaryButton } from '@/components/buttons/SecondaryButton';
@@ -16,9 +20,9 @@ import useHapticNavigation from '@/hooks/useHapticNavigation';
 import NFC_IMAGE from '@/images/nfc.png';
 import { ExpandableBottomLayout } from '@/layouts/ExpandableBottomLayout';
 import { black, slate100, white } from '@/utils/colors';
-import { hasAnyValidRegisteredDocument } from '@/utils/proving/validateDocument';
 
 const PassportNFCScanScreen: React.FC = () => {
+  const selfClient = useSelfClient();
   const navigateToLaunch = useHapticNavigation('Launch', {
     action: 'cancel',
   });
@@ -27,7 +31,7 @@ const PassportNFCScanScreen: React.FC = () => {
   });
 
   const onCancelPress = async () => {
-    const hasValidDocument = await hasAnyValidRegisteredDocument();
+    const hasValidDocument = await hasAnyValidRegisteredDocument(selfClient);
     if (hasValidDocument) {
       navigateToHome();
     } else {

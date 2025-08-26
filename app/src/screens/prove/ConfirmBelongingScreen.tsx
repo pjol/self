@@ -32,7 +32,8 @@ import { useProvingStore } from '@/utils/proving/provingMachine';
 type ConfirmBelongingScreenProps = StaticScreenProps<Record<string, never>>;
 
 const ConfirmBelongingScreen: React.FC<ConfirmBelongingScreenProps> = () => {
-  const { trackEvent } = useSelfClient();
+  const selfClient = useSelfClient();
+  const { trackEvent } = selfClient;
   const navigate = useHapticNavigation('LoadingScreen', {
     params: {},
   });
@@ -42,11 +43,10 @@ const ConfirmBelongingScreen: React.FC<ConfirmBelongingScreenProps> = () => {
   const setFcmToken = useProvingStore(state => state.setFcmToken);
   const setUserConfirmed = useProvingStore(state => state.setUserConfirmed);
   const isReadyToProve = currentState === 'ready_to_prove';
-
   useEffect(() => {
     notificationSuccess();
-    init('dsc');
-  }, [init]);
+    init(selfClient, 'dsc');
+  }, [init, selfClient]);
 
   const onOkPress = async () => {
     try {
