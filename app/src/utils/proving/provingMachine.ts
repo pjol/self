@@ -677,6 +677,14 @@ export const useProvingStore = create<ProvingState>((set, get) => {
         if (!passportData) {
           throw new Error('PassportData is not available');
         }
+        if (!passportData?.dsc_parsed) {
+          console.error('Missing parsed DSC in passport data');
+          trackEvent(ProofEvents.FETCH_DATA_FAILED, {
+            message: 'Missing parsed DSC in passport data',
+          });
+          actor!.send({ type: 'FETCH_ERROR' });
+          return;
+        }
         const document: DocumentCategory = passportData.documentCategory;
         await useProtocolStore
           .getState()
