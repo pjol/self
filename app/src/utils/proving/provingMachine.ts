@@ -27,6 +27,7 @@ import {
 } from '@selfxyz/common/utils/proving';
 import {
   hasAnyValidRegisteredDocument,
+  loadSelectedDocument,
   SelfClient,
 } from '@selfxyz/mobile-sdk-alpha';
 import {
@@ -38,7 +39,6 @@ import { navigationRef } from '@/navigation';
 // will need to be passed in from selfClient
 import {
   clearPassportData,
-  loadSelectedDocument,
   markCurrentDocumentAsRegistered,
   reStorePassportDataWithRightCSCA,
 } from '@/providers/passportDataProvider';
@@ -642,7 +642,7 @@ export const useProvingStore = create<ProvingState>((set, get) => {
       actor.start();
 
       trackEvent(ProofEvents.DOCUMENT_LOAD_STARTED);
-      const selectedDocument = await loadSelectedDocument();
+      const selectedDocument = await loadSelectedDocument(selfClient);
       if (!selectedDocument) {
         console.error('No document found for proving');
         trackEvent(PassportEvents.PASSPORT_DATA_NOT_FOUND, { stage: 'init' });
