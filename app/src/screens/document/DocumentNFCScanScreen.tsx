@@ -67,7 +67,7 @@ const emitter =
     ? new NativeEventEmitter(NativeModules.nativeModule)
     : null;
 
-type PassportNFCScanRouteParams = {
+type DocumentNFCScanRouteParams = {
   usePacePolling?: boolean;
   canNumber?: string;
   useCan?: boolean;
@@ -76,17 +76,17 @@ type PassportNFCScanRouteParams = {
   extendedMode?: boolean;
 };
 
-type PassportNFCScanRoute = RouteProp<
-  Record<string, PassportNFCScanRouteParams>,
+type DocumentNFCScanRoute = RouteProp<
+  Record<string, DocumentNFCScanRouteParams>,
   string
 >;
 
-const PassportNFCScanScreen: React.FC = () => {
+const DocumentNFCScanScreen: React.FC = () => {
   const selfClient = useSelfClient();
   const { trackEvent } = selfClient;
 
   const navigation = useNavigation();
-  const route = useRoute<PassportNFCScanRoute>();
+  const route = useRoute<DocumentNFCScanRoute>();
   const { showModal } = useFeedback();
   useFeedbackAutoHide();
   const {
@@ -123,9 +123,9 @@ const PassportNFCScanScreen: React.FC = () => {
   }, []);
 
   const goToNFCMethodSelection = useHapticNavigation(
-    'PassportNFCMethodSelection',
+    'DocumentNFCMethodSelection',
   );
-  const goToNFCTrouble = useHapticNavigation('PassportNFCTrouble');
+  const goToNFCTrouble = useHapticNavigation('DocumentNFCTrouble');
 
   // 5-taps with a single finger
   const devModeTap = Gesture.Tap()
@@ -329,7 +329,7 @@ const PassportNFCScanScreen: React.FC = () => {
           if (scanCancelledRef.current) {
             return;
           }
-          navigation.navigate('ConfirmBelongingScreen', {});
+          navigation.navigate('ConfirmBelonging', {});
         } catch (e: unknown) {
           // Check if scan was cancelled by timeout
           if (scanCancelledRef.current) {
@@ -597,7 +597,7 @@ const PassportNFCScanScreen: React.FC = () => {
   );
 };
 
-export default PassportNFCScanScreen;
+export default DocumentNFCScanScreen;
 
 const styles = StyleSheet.create({
   title: {

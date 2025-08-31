@@ -16,20 +16,20 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { DefaultNavBar } from '@/components/NavBar';
 import AppLayout from '@/layouts/AppLayout';
 import { getAesopScreens } from '@/navigation/aesop';
-import devScreens from '@/navigation/devTools';
+import devScreens from '@/navigation/dev';
+import documentScreens from '@/navigation/document';
 import homeScreens from '@/navigation/home';
-import miscScreens from '@/navigation/misc';
-import passportScreens from '@/navigation/passport';
 import proveScreens from '@/navigation/prove';
 import recoveryScreens from '@/navigation/recovery';
 import settingsScreens from '@/navigation/settings';
+import systemScreens from '@/navigation/system';
 import analytics from '@/utils/analytics';
 import { white } from '@/utils/colors';
 import { setupUniversalLinkListenerInNavigation } from '@/utils/deeplinks';
 
 export const navigationScreens = {
-  ...miscScreens,
-  ...passportScreens,
+  ...systemScreens,
+  ...documentScreens,
   ...homeScreens,
   ...proveScreens,
   ...settingsScreens,

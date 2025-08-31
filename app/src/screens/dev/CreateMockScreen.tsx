@@ -156,7 +156,7 @@ const FormSection: React.FC<FormSectionProps> = ({
   );
 };
 
-const MockDataScreen: React.FC = () => {
+const CreateMockScreen: React.FC = () => {
   const { trackEvent } = useSelfClient();
   const navigation = useNavigation();
   const {
@@ -191,7 +191,7 @@ const MockDataScreen: React.FC = () => {
         selectedDocumentType,
       });
       await storePassportData(parsedMockData);
-      navigation.navigate('ConfirmBelongingScreen', {});
+      navigation.navigate('ConfirmBelonging', {});
     } catch (error) {
       console.error('Error during mock data generation:', error);
     } finally {
@@ -689,4 +689,4 @@ const MockDataScreen: React.FC = () => {
   );
 };
 
-export default MockDataScreen;
+export default CreateMockScreen;
