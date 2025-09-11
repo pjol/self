@@ -101,6 +101,28 @@ contract IdentityVerificationHubImplV2 is ImplRoot {
      */
     event DscCircuitVerifierUpdated(uint256 typeId, address verifier);
 
+    /**
+     * @notice Emitted when a verification is performed.
+     * @param requestor The contract that initiated the verification request.
+     * @param contractVersion The contract version used for verification output formatting.
+     * @param attestationId The attestation identifier (E_PASSPORT or EU_ID_CARD).
+     * @param destChainId The destination chain ID.
+     * @param configId The configuration ID.
+     * @param userIdentifier The user identifier.
+     * @param output The formatted verification output containing proof results.
+     * @param userDataToPass The user data passed through to the verification result handler.
+     */
+    event DisclosureVerified(
+        address indexed requestor,
+        uint8 indexed contractVersion,
+        bytes32 indexed attestationId,
+        uint256 destChainId,
+        bytes32 configId,
+        uint256 userIdentifier,
+        bytes output,
+        bytes userDataToPass
+    );
+
     // ====================================================
     // Errors
     // ====================================================
@@ -311,14 +333,28 @@ contract IdentityVerificationHubImplV2 is ImplRoot {
         (SelfStructs.HubInputHeader memory header, bytes calldata proofData) = _decodeInput(baseVerificationInput);
 
         // Perform verification and get output along with user data
-        (bytes memory output, uint256 destChainId, bytes memory userDataToPass) = _executeVerificationFlow(
-            header,
-            proofData,
-            userContextData
-        );
+        (
+            bytes memory output,
+            uint256 destChainId,
+            bytes memory userDataToPass,
+            bytes32 configId,
+            uint256 userIdentifier
+        ) = _executeVerificationFlow(header, proofData, userContextData);
 
         // Use destChainId and userDataToPass returned from _executeVerificationFlow
         _handleVerificationResult(destChainId, output, userDataToPass);
+
+        // Emit verification event for tracking
+        emit DisclosureVerified(
+            msg.sender,
+            header.contractVersion,
+            header.attestationId,
+            destChainId,
+            configId,
+            userIdentifier,
+            output,
+            userDataToPass
+        );
     }
 
     /**
@@ -552,14 +588,19 @@ contract IdentityVerificationHubImplV2 is ImplRoot {
         SelfStructs.HubInputHeader memory header,
         bytes memory proofData,
         bytes calldata userContextData
-    ) internal returns (bytes memory output, uint256 destChainId, bytes memory userDataToPass) {
-        bytes32 configId;
-        uint256 userIdentifier;
+    )
+        internal
+        returns (
+            bytes memory output,
+            uint256 destChainId,
+            bytes memory userDataToPass,
+            bytes32 configId,
+            uint256 userIdentifier
+        )
+    {
         bytes calldata remainingData;
         {
-            uint256 _destChainId;
-            (configId, _destChainId, userIdentifier, remainingData) = _decodeUserContextData(userContextData);
-            destChainId = _destChainId;
+            (configId, destChainId, userIdentifier, remainingData) = _decodeUserContextData(userContextData);
         }
 
         {
