@@ -8,7 +8,10 @@ import { ActivityIndicator, View } from 'react-native';
 import type { StaticScreenProps } from '@react-navigation/native';
 import { usePreventRemove } from '@react-navigation/native';
 
-import { loadSelectedDocument, useSelfClient } from '@selfxyz/mobile-sdk-alpha';
+import {
+  usePrepareDocumentProof,
+  useSelfClient,
+} from '@selfxyz/mobile-sdk-alpha';
 import {
   PassportEvents,
   ProofEvents,
@@ -34,35 +37,17 @@ type ConfirmBelongingScreenProps = StaticScreenProps<Record<string, never>>;
 
 const ConfirmBelongingScreen: React.FC<ConfirmBelongingScreenProps> = () => {
   const selfClient = useSelfClient();
-  const { useProvingStore, trackEvent } = selfClient;
+  const { trackEvent } = selfClient;
   const navigate = useHapticNavigation('Loading', {
     params: {},
   });
   const [_requestingPermission, setRequestingPermission] = useState(false);
-  const currentState = useProvingStore(state => state.currentState);
-  const init = useProvingStore(state => state.init);
-  const setUserConfirmed = useProvingStore(state => state.setUserConfirmed);
+  const { setUserConfirmed, isReadyToProve } = usePrepareDocumentProof();
   const setFcmToken = useSettingStore(state => state.setFcmToken);
-  const isReadyToProve = currentState === 'ready_to_prove';
+
   useEffect(() => {
     notificationSuccess();
-
-    const initializeProving = async () => {
-      try {
-        const selectedDocument = await loadSelectedDocument(selfClient);
-        if (selectedDocument?.data?.documentCategory === 'aadhaar') {
-          init(selfClient, 'register');
-        } else {
-          init(selfClient, 'dsc');
-        }
-      } catch (error) {
-        console.error('Error loading selected document:', error);
-        init(selfClient, 'dsc');
-      }
-    };
-
-    initializeProving();
-  }, [init, selfClient]);
+  }, []);
 
   const onOkPress = async () => {
     try {
