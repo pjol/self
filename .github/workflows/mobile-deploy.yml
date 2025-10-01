@@ -925,6 +925,7 @@ jobs:
 
       - name: Upload to Google Play Store using WIF
         if: inputs.platform != 'ios' && inputs.test_mode != true
+        timeout-minutes: 10
         run: |
           cd ${{ env.APP_PATH }}
 
@@ -990,7 +991,7 @@ jobs:
         with:
           token: ${{ github.token }}
           fetch-depth: 0
-          ref: staging
+          ref: dev
       - name: Read and sanitize Node.js version
         shell: bash
         run: |

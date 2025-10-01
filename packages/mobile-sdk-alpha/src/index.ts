@@ -45,9 +45,12 @@ export type { PassportValidationCallbacks } from './validation/document';
 
 export type { QRProofOptions } from './qr';
 
+export type { SDKEvent, SDKEventMap } from './types/events';
+
 // Error handling
 export type { SdkErrorCategory } from './errors';
 
+// Screen Components (React Native-based)
 export {
   InitError,
   LivenessError,
@@ -58,17 +61,15 @@ export {
   notImplemented,
   sdkError,
 } from './errors';
-
-// Screen Components (React Native-based)
 export { NFCScannerScreen } from './components/screens/NFCScannerScreen';
 export { PassportCameraScreen } from './components/screens/PassportCameraScreen';
-export { QRCodeScreen } from './components/screens/QRCodeScreen';
 
 // Context and Client
+export { QRCodeScreen } from './components/screens/QRCodeScreen';
 export { SdkEvents } from './types/events';
 
 // Components
-export { SelfClientContext, SelfClientProvider, useSelfClient } from './context';
+export { SelfClientContext, SelfClientProvider, usePrepareDocumentProof, useSelfClient } from './context';
 
 // Documents utils
 export { SelfMobileSdk } from './entry';
@@ -87,9 +88,7 @@ export { createListenersMap, createSelfClient } from './client';
 /** @deprecated Use createSelfClient().extractMRZInfo or import from './mrz' */
 export { defaultConfig } from './config/defaults';
 
-export { extractMRZInfo } from './mrz';
-
-export { formatDateToYYMMDD, scanMRZ } from './mrz';
+export { extractMRZInfo, extractNameFromMRZ, formatDateToYYMMDD, scanMRZ } from './mrz';
 
 export { generateMockDocument, signatureAlgorithmToStrictSignatureAlgorithm } from './mock/generator';
 
