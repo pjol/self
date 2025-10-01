@@ -136,7 +136,7 @@ export const SelfClientProvider = ({ children }: PropsWithChildren) => {
       SdkEvents.PROVING_PASSPORT_NOT_SUPPORTED,
       ({ countryCode, documentCategory }) => {
         if (navigationRef.isReady()) {
-          navigationRef.navigate('UnsupportedDocument', {
+          navigationRef.navigate('ComingSoon', {
             countryCode,
             documentCategory,
           } as any);

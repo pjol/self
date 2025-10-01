@@ -972,7 +972,7 @@ export const useProvingStore = create<ProvingState>((set, get) => {
             duration_ms: Date.now() - startTime,
           });
           console.error('Passport not supported:', isSupported.status, isSupported.details);
-          selfClient.trackEvent(PassportEvents.UNSUPPORTED_PASSPORT, {
+          selfClient.trackEvent(PassportEvents.COMING_SOON, {
             status: isSupported.status,
             details: isSupported.details,
           });

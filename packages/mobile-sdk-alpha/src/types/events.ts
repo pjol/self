@@ -70,6 +70,22 @@ export enum SdkEvents {
   PROVING_ACCOUNT_RECOVERY_REQUIRED = 'PROVING_ACCOUNT_RECOVERY_REQUIRED',
 
   /**
+   * Emitted when a user selects a country in the document flow.
+   *
+   * **Recommended:** Use this event to track user selection patterns and analytics.
+   * The event includes the selected country code and available document types.
+   */
+  DOCUMENT_COUNTRY_SELECTED = 'DOCUMENT_COUNTRY_SELECTED',
+
+  /**
+   * Emitted when a user selects a document type for verification.
+   *
+   * **Recommended:** Use this event to track document type preferences and analytics.
+   * The event includes the selected document type, country code, and document name.
+   */
+  DOCUMENT_TYPE_SELECTED = 'DOCUMENT_TYPE_SELECTED',
+
+  /**
    * Emitted when the proving generation process begins.
    *
    * **Recommended:** Use this to handle notification token registration and other setup tasks
@@ -105,6 +121,17 @@ export interface SDKEventMap {
     documentCategory: DocumentCategory | null;
   };
   [SdkEvents.PROVING_ACCOUNT_RECOVERY_REQUIRED]: undefined;
+  [SdkEvents.DOCUMENT_COUNTRY_SELECTED]: {
+    countryCode: string;
+    countryName: string;
+    documentTypes: string[];
+  };
+  [SdkEvents.DOCUMENT_TYPE_SELECTED]: {
+    documentType: string;
+    documentName: string;
+    countryCode: string;
+    countryName: string;
+  };
   [SdkEvents.PROVING_BEGIN_GENERATION]: {
     uuid: string;
     isMock: boolean;
