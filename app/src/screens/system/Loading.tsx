@@ -20,6 +20,7 @@ import failAnimation from '@/assets/animations/loading/fail.json';
 import proveLoadingAnimation from '@/assets/animations/loading/prove.json';
 import CloseWarningIcon from '@/images/icons/close-warning.svg';
 import { loadPassportDataAndSecret } from '@/providers/passportDataProvider';
+import { useSettingStore } from '@/stores/settingStore';
 import { black, slate400, white, zinc500, zinc900 } from '@/utils/colors';
 import { extraYPadding } from '@/utils/constants';
 import { advercase, dinot } from '@/utils/fonts';
@@ -60,7 +61,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({}) => {
 
   // Get current state from proving machine, default to 'idle' if undefined
   const currentState = useProvingStore(state => state.currentState) ?? 'idle';
-  const fcmToken = useProvingStore(state => state.fcmToken);
+  const fcmToken = useSettingStore(state => state.fcmToken);
   const isFocused = useIsFocused();
   const { bottom } = useSafeAreaInsets();
 
