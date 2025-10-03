@@ -114,7 +114,7 @@ export const SelfClientProvider = ({ children }: PropsWithChildren) => {
         if (navigationRef.isReady()) {
           navigationRef.navigate('AccountVerifiedSuccess');
         }
-      }, 3000);
+      }, 1000);
     });
 
     addListener(
@@ -187,6 +187,18 @@ export const SelfClientProvider = ({ children }: PropsWithChildren) => {
     addListener(SdkEvents.NFC_EVENT, ({ level, context, event, details }) => {
       // Log nfc events for monitoring/debugging
       logNFCEvent(level, event, context, details);
+    });
+
+    addListener(SdkEvents.DOCUMENT_MRZ_READ_SUCCESS, () => {
+      if (navigationRef.isReady()) {
+        navigationRef.navigate('DocumentNFCScan');
+      }
+    });
+
+    addListener(SdkEvents.DOCUMENT_MRZ_READ_FAILURE, () => {
+      if (navigationRef.isReady()) {
+        navigationRef.navigate('DocumentCameraTrouble');
+      }
     });
 
     return map;
