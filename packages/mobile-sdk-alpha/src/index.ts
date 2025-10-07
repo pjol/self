@@ -74,8 +74,6 @@ export { SdkEvents } from './types/events';
 // Documents utils
 export { SelfClientContext, SelfClientProvider, useSelfClient } from './context';
 
-export { SelfMobileSdk } from './entry';
-
 export {
   clearPassportData,
   getAllDocuments,
@@ -109,4 +107,5 @@ export { reactNativeScannerAdapter } from './adapters/react-native/scanner';
 
 export { scanQRProof } from './qr';
 
+export { useCountries } from './documents/useCountries';
 export { webScannerShim } from './adapters/web/shims';
