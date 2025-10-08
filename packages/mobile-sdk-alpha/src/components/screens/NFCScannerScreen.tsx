@@ -9,7 +9,7 @@ import { View } from 'tamagui';
 import { getSKIPEM, initPassportDataParsing } from '@selfxyz/common';
 
 import { useSelfClient } from '../../context';
-import { ScanResultNFC } from '../../types/public';
+import { NFCScanResult } from '../../types/public';
 import type { ScreenProps } from '../../types/ui';
 
 export const NFCScannerScreen = ({ onSuccess, onFailure }: ScreenProps) => {
@@ -23,15 +23,15 @@ export const NFCScannerScreen = ({ onSuccess, onFailure }: ScreenProps) => {
     async (_nfcData: any) => {
       try {
         // scan the document
-        const scanResult = await client.scanDocument({
-          mode: 'nfc',
+        const scanResult = await client.scanNFC({
           passportNumber: mrzData.documentNumber,
           dateOfBirth: mrzData.dateOfBirth,
           dateOfExpiry: mrzData.dateOfExpiry,
+          sessionId: '123', // TODO: generate a unique session id
         });
 
         const skiPem = await getSKIPEM('production');
-        const _parsedPassportData = initPassportDataParsing((scanResult as ScanResultNFC).passportData, skiPem);
+        const _parsedPassportData = initPassportDataParsing((scanResult as NFCScanResult).passportData, skiPem);
 
         // register the document
         onSuccess();
