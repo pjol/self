@@ -40,7 +40,7 @@ import { extraYPadding } from '@/utils/constants';
 import { impactLight } from '@/utils/haptic';
 import { getCountry, getLocales, getTimeZone } from '@/utils/locale';
 
-import { version } from '../../../package.json';
+import { version } from '../../../../package.json';
 
 interface MenuButtonProps extends PropsWithChildren {
   Icon: React.FC<SvgProps>;
