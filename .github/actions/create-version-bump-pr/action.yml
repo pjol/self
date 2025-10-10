@@ -1,0 +1,62 @@
+name: Create Version Bump PR
+description: Creates a PR from staging changes onto dev branch
+inputs:
+  platform:
+    description: Platform name (ios or android)
+    required: true
+  version:
+    description: Current version string
+    required: true
+  file_paths:
+    description: File paths to include in the PR (newline separated)
+    required: true
+  github_token:
+    description: GitHub token for creating PR
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Create version bump PR
+      shell: bash
+      run: |
+        BRANCH_NAME="ci/bump-${{ inputs.platform }}-build-${{ github.run_id }}"
+
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+        # Ensure we're on staging branch, not detached HEAD
+        git fetch origin staging dev
+        git checkout staging
+
+        # Check if staging has commits not in dev (version bumps + any build changes)
+        COMMITS_AHEAD=$(git rev-list --count origin/dev..staging)
+
+        if [ "$COMMITS_AHEAD" -eq 0 ]; then
+          echo "ℹ️  No new commits on staging compared to dev. Skipping PR creation."
+          exit 0
+        fi
+
+        echo "📊 Staging is $COMMITS_AHEAD commit(s) ahead of dev"
+
+        # Create new branch from current staging (which has all version changes)
+        git checkout -b ${BRANCH_NAME}
+
+        # Push the branch
+        git push --set-upstream origin ${BRANCH_NAME}
+
+        # Determine PR title based on platform
+        if [ "${{ inputs.platform }}" = "mobile" ]; then
+          PR_TITLE="chore: bump mobile app version to ${{ inputs.version }}"
+        else
+          PR_TITLE="chore: bump ${{ inputs.platform }} build for ${{ inputs.version }}"
+        fi
+
+        gh pr create \
+          --base dev \
+          --head ${BRANCH_NAME} \
+          --title "$PR_TITLE" \
+          --body "Automated version bump by CI" \
+          --label "automated"
+      env:
+        GH_TOKEN: ${{ inputs.github_token }}
