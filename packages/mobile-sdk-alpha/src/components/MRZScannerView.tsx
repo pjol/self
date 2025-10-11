@@ -7,7 +7,7 @@ import type { DimensionValue, NativeSyntheticEvent, ViewProps, ViewStyle } from 
 import { NativeModules, PixelRatio, Platform, requireNativeComponent, StyleSheet, View } from 'react-native';
 
 import { extractMRZInfo, formatDateToYYMMDD } from '../mrz';
-import { MRZInfo } from '../types/public';
+import type { MRZInfo } from '../types/public';
 import { RCTFragment } from './RCTFragment';
 
 interface SelfMRZScannerViewProps extends ViewProps {
@@ -125,7 +125,7 @@ export const MRZScannerView: React.FC<MRZScannerViewProps> = ({
       <View style={containerStyle}>
         <RCTFragment
           RCTFragmentViewManager={NativeMRZScannerView as any}
-          fragmentComponentName="PassportOCRViewManager"
+          fragmentComponentName="SelfOCRViewManager"
           isMounted={true}
           style={{
             height: PixelRatio.getPixelSizeForLayoutSize(800),

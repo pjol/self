@@ -3,7 +3,6 @@
 // NOTE: Converts to Apache-2.0 on 2029-06-11 per LICENSE.
 
 import { flag } from 'country-emoji';
-import getCountryISO2 from 'country-iso-3-to-2';
 import React, { useCallback, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -20,9 +19,11 @@ import {
   YStack,
 } from 'tamagui';
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ChevronDown, Minus, Plus, X } from '@tamagui/lucide-icons';
 
 import { countryCodes } from '@selfxyz/common/constants';
+import { getCountryISO2 } from '@selfxyz/common/constants/countries';
 import {
   generateMockDocument,
   signatureAlgorithmToStrictSignatureAlgorithm,
@@ -37,6 +38,7 @@ import { useMockDataForm } from '@/hooks/useMockDataForm';
 import SelfDevCard from '@/images/card-dev.svg';
 import IdIcon from '@/images/icons/id_icon.svg';
 import NoteIcon from '@/images/icons/note.svg';
+import type { RootStackParamList } from '@/navigation';
 import { storePassportData } from '@/providers/passportDataProvider';
 import {
   black,
@@ -159,7 +161,8 @@ const FormSection: React.FC<FormSectionProps> = ({
 
 const CreateMockScreen: React.FC = () => {
   const { trackEvent } = useSelfClient();
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const {
     age,
     setAge,
