@@ -14,7 +14,12 @@ module.exports = {
       ios: {
         podspecPath: path.join(packageRoot, 'mobile-sdk-alpha.podspec'),
       },
-      android: null,
+      android: {
+        sourceDir: path.join(packageRoot, 'android'),
+        packageImportPath: 'import com.selfxyz.selfSDK.RNSelfPassportReaderPackage;',
+        packageInstance: 'new RNSelfPassportReaderPackage()',
+      },
     },
   },
+  assets: ['./assets/fonts'],
 };

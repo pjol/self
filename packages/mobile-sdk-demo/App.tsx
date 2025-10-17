@@ -4,12 +4,12 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 
-import type { DocumentCatalog, DocumentMetadata } from '@selfxyz/common/dist/esm/src/utils/types.js';
-import type { IDDocument } from '@selfxyz/common/dist/esm/src/utils/types.js';
+import type { DocumentCatalog, DocumentMetadata, IDDocument } from '@selfxyz/common/utils/types';
 import { loadSelectedDocument, useSelfClient } from '@selfxyz/mobile-sdk-alpha';
 
 import HomeScreen from './src/screens/HomeScreen';
-import { screenMap, type ScreenContext, type ScreenRoute } from './src/screens';
+import type { ScreenContext, ScreenRoute } from './src/screens';
+import { screenMap } from './src/screens';
 import SelfClientProvider from './src/providers/SelfClientProvider';
 
 type SelectedDocumentState = {

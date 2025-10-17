@@ -20,6 +20,8 @@ interface PersistedSettingsState {
   isDevMode: boolean;
   setDevModeOn: () => void;
   setDevModeOff: () => void;
+  hasCompletedKeychainMigration: boolean;
+  setKeychainMigrationCompleted: () => void;
   fcmToken: string | null;
   setFcmToken: (token: string | null) => void;
 }
@@ -71,6 +73,9 @@ export const useSettingStore = create<SettingsState>()(
       setDevModeOn: () => set({ isDevMode: true }),
       setDevModeOff: () => set({ isDevMode: false }),
 
+      hasCompletedKeychainMigration: false,
+      setKeychainMigrationCompleted: () =>
+        set({ hasCompletedKeychainMigration: true }),
       fcmToken: null,
       setFcmToken: (token: string | null) => set({ fcmToken: token }),
 
@@ -85,9 +90,9 @@ export const useSettingStore = create<SettingsState>()(
       storage: createJSONStorage(() => AsyncStorage),
       onRehydrateStorage: () => undefined,
       partialize: state => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { hideNetworkModal, setHideNetworkModal, ...persistedState } =
-          state;
+        const persistedState = { ...state };
+        delete (persistedState as Partial<SettingsState>).hideNetworkModal;
+        delete (persistedState as Partial<SettingsState>).setHideNetworkModal;
         return persistedState;
       },
     },

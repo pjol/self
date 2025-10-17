@@ -12,9 +12,12 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card, Image, Text, View, XStack, YStack } from 'tamagui';
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CheckSquare2, Wallet, XCircle } from '@tamagui/lucide-icons';
 
-import { BodyText } from '@/components/typography/BodyText';
+import { BodyText } from '@selfxyz/mobile-sdk-alpha/components';
+
+import type { RootStackParamList } from '@/navigation';
 import { useProofHistoryStore } from '@/stores/proofHistoryStore';
 import type { ProofHistory } from '@/stores/proofTypes';
 import { ProofStatus } from '@/stores/proofTypes';
@@ -57,7 +60,8 @@ const ProofHistoryScreen: React.FC = () => {
     hasMore,
   } = useProofHistoryStore();
   const [refreshing, setRefreshing] = useState(false);
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { bottom } = useSafeAreaInsets();
 
   useEffect(() => {
@@ -235,10 +239,12 @@ const ProofHistoryScreen: React.FC = () => {
                     />
                   )}
                   <YStack flex={1}>
-                    <BodyText fontSize={20} color={black} fontWeight="500">
+                    <BodyText
+                      style={{ fontSize: 20, color: black, fontWeight: '500' }}
+                    >
                       {item.appName}
                     </BodyText>
-                    <BodyText color={slate300} gap={2} fontSize={14}>
+                    <BodyText style={{ color: slate300, fontSize: 14 }}>
                       {formatDate(item.timestamp)}
                     </BodyText>
                   </YStack>

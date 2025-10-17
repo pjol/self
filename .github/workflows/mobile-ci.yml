@@ -86,6 +86,9 @@ jobs:
       - name: Run prettier
         run: yarn fmt
         working-directory: ./app
+      - name: Check App Types
+        run: yarn types
+        working-directory: ./app
       - name: Check license headers
         run: node scripts/check-license-headers.mjs --check
         working-directory: ./
@@ -416,6 +419,8 @@ jobs:
             node_modules
             app/node_modules
           cache-version: ${{ env.GH_CACHE_VERSION }}-${{ env.NODE_VERSION_SANITIZED }}
+      - name: Free up disk space
+        uses: ./.github/actions/free-disk-space
       - name: Cache Gradle
         uses: ./.github/actions/cache-gradle
         with:
@@ -456,3 +461,5 @@ jobs:
       - name: Build Android (with AAPT2 symlink fix)
         run: yarn android:ci
         working-directory: ./app
+      - name: Clean up Gradle build artifacts
+        uses: ./.github/actions/cleanup-gradle-artifacts

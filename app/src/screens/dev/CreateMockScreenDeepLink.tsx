@@ -3,30 +3,35 @@
 // NOTE: Converts to Apache-2.0 on 2029-06-11 per LICENSE.
 
 import { flag } from 'country-emoji';
-import getCountryISO2 from 'country-iso-3-to-2';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScrollView, Text, XStack, YStack } from 'tamagui';
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { countryCodes } from '@selfxyz/common/constants';
+import { getCountryISO2 } from '@selfxyz/common/constants/countries';
 import type { IdDocInput } from '@selfxyz/common/utils';
 import { genMockIdDocAndInitDataParsing } from '@selfxyz/common/utils/passports';
+import {
+  BodyText,
+  Description,
+  PrimaryButton,
+  Title,
+} from '@selfxyz/mobile-sdk-alpha/components';
 import { MockDataEvents } from '@selfxyz/mobile-sdk-alpha/constants/analytics';
 
-import { PrimaryButton } from '@/components/buttons/PrimaryButton';
 import ButtonsContainer from '@/components/ButtonsContainer';
-import { BodyText } from '@/components/typography/BodyText';
-import Description from '@/components/typography/Description';
-import { Title } from '@/components/typography/Title';
+import type { RootStackParamList } from '@/navigation';
 import { storePassportData } from '@/providers/passportDataProvider';
 import useUserStore from '@/stores/userStore';
 import { black, borderColor, white } from '@/utils/colors';
 import { extraYPadding } from '@/utils/constants';
 
 const CreateMockScreenDeepLink: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [selectedCountry, setSelectedCountry] = useState('USA');
 
@@ -193,7 +198,7 @@ const CreateMockScreenDeepLink: React.FC = () => {
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <ActivityIndicator color={black} style={{ marginRight: 8 }} />
-              <Description color={black} fontWeight="bold">
+              <Description style={{ color: black, fontWeight: 'bold' }}>
                 Onboarding your Developer ID
               </Description>
             </View>
