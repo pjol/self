@@ -14,15 +14,11 @@ import {Formatter} from "../libraries/Formatter.sol";
 
 /**
  * @title SelfVerificationRootUpgradeable
- * @notice Abstract upgradeable contract to be integrated with self's verification infrastructure
+ * @notice Abstract upgradeable base contract to be integrated with self's verification infrastructure
  * @dev Provides base functionality for verifying and disclosing identity credentials with proxy upgrades enabled
  * @author Self Team
  */
-abstract contract SelfVerificationRootUpgradeable is
-    Initializable,
-    ContextUpgradeable,
-    ISelfVerificationRoot
-{
+abstract contract SelfVerificationRootUpgradeable is Initializable, ContextUpgradeable, ISelfVerificationRoot {
     // ====================================================
     // Constants
     // ====================================================
@@ -38,15 +34,12 @@ abstract contract SelfVerificationRootUpgradeable is
     /// @notice The storage struct used to hold contract state according to the UUPSUpgradeable pattern
     /// @dev Used to maintain storage state across contract upgrades
     struct SelfVerificationRootStorage {
-
         /// @notice The scope value that proofs must match
         /// @dev Used to validate that submitted proofs match the expected scope
         uint256 _scope;
-
         /// @notice Reference to the identity verification hub V2 contract
         /// @dev Immutable reference used for bytes-based proof verification
         IIdentityVerificationHubV2 _identityVerificationHubV2;
-
     }
 
     /// @notice The internal storage address for contract state.
@@ -79,24 +72,50 @@ abstract contract SelfVerificationRootUpgradeable is
     // Events
     // ====================================================
 
+    // ====================================================
+    // Constructor
+    // ====================================================
+
+    /**
+     * @dev Prevents the implementation contract from being initialized.
+     * @dev The actual initialization will be done via the proxy using the `initialize()` function
+     * in the derived contract.
+     * @custom:oz-upgrades-unsafe-allow constructor
+     */
+    constructor() {
+        _disableInitializers();
+    }
+
+    // ====================================================
+    // Initializer
+    // ====================================================
+
+    // Implementing contracts must define an initialize function like this:
+    // function initialize(address hubAddress, string memory scopeSeed) public initializer {
+    //     __SelfVerificationRoot_init(hubAddress, scopeSeed);
+    //     // Add your own initialization logic here
+    // }
+
     /**
      * @notice Initializes the SelfVerificationRootUpgradeable contract
      * @dev Sets up the immutable reference to the hub contract and generates scope automatically
+     * @dev Must be called from the public `initialize()` function in your derived contract
      * @param identityVerificationHubV2Address The address of the Identity Verification Hub V2
      * @param scopeSeed The scope seed string to be hashed with contract address to generate the scope
      */
     function __SelfVerificationRoot_init(
         address identityVerificationHubV2Address,
         string memory scopeSeed
-    )
-        internal
-        onlyInitializing
-    {
+    ) internal onlyInitializing {
         SelfVerificationRootStorage storage $ = _getSelfVerificationRootStorage();
 
         $._identityVerificationHubV2 = IIdentityVerificationHubV2(identityVerificationHubV2Address);
         $._scope = _calculateScope(address(this), scopeSeed, _getPoseidonAddress());
     }
+
+    // ====================================================
+    // Public Functions
+    // ====================================================
 
     /**
      * @notice Returns the current scope value
@@ -214,6 +233,10 @@ abstract contract SelfVerificationRootUpgradeable is
     ) internal virtual {
         // Default implementation is empty - override in derived contracts to add custom logic
     }
+
+    // ====================================================
+    // Internal Functions
+    // ====================================================
 
     /**
      * @notice Gets the PoseidonT3 library address for the current chain
