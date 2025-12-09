@@ -36,10 +36,7 @@ const config: HardhatUserConfig = {
     localhost: {
       chainId: 31337,
       url: "http://127.0.0.1:8545",
-      accounts: {
-        mnemonic: "test test test test test test test test test test test test",
-        count: 20,
-      },
+      accounts: [PRIVATE_KEY],
     },
     mainnet: {
       chainId: 1,

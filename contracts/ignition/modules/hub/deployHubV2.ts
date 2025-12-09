@@ -8,7 +8,7 @@ import hre from "hardhat";
  * @returns ethers.Interface instance for the hub implementation contract
  */
 function getHubImplV2InitializeData() {
-  const hubArtifact = artifacts.readArtifactSync("IdentityVerificationHubImplV2");
+  const hubArtifact = artifacts.readArtifactSync("IdentityVerificationHubImplV2Small");
   return new ethers.Interface(hubArtifact.abi);
 }
 
@@ -69,9 +69,14 @@ export default buildModule("DeployHubV2", (m) => {
   // Deploy the CustomVerifier library
   const customVerifier = m.library("CustomVerifier");
 
+  const identityVerificationLibrary = m.library("IdentityVerificationLibrary");
+
   // Deploy the implementation contract with library linkage
-  const identityVerificationHubImplV2 = m.contract("IdentityVerificationHubImplV2", [], {
-    libraries: { CustomVerifier: customVerifier },
+  const identityVerificationHubImplV2 = m.contract("IdentityVerificationHubImplV2Small", [], {
+    libraries: {
+      CustomVerifier: customVerifier,
+      IdentityVerificationLibrary: identityVerificationLibrary
+     },
   });
 
   // Get the interface to encode the initialize function call
