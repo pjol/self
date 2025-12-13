@@ -32,7 +32,7 @@ console.log("Current directory:", __dirname);
 
 try {
   console.log("Deployed addresses loaded:", deployedAddresses);
-  const hubABI = getContractAbi(repoName, "DeployHubV2#IdentityVerificationHubImplV2");
+  const hubABI = getContractAbi(repoName, "DeployHubV2#IdentityVerificationHubImplV2Small");
 
   async function main() {
     const provider = new ethers.JsonRpcProvider(RPC_URL);

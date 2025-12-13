@@ -58,6 +58,17 @@ const config: HardhatUserConfig = {
       url: process.env.CELO_SEPOLIA_RPC_URL || "https://rpc.ankr.com/celo_sepolia",
       accounts: [PRIVATE_KEY],
     },
+    berachain: {
+      chainId: 80094,
+      url: process.env.BERACHAIN_RPC_URL || "https://rpc.berachain.com",
+      accounts: [PRIVATE_KEY],
+    },
+    bepolia: {
+      chainId: 80069,
+      url: process.env.BERACHAIN_RPC_URL || "https://bepolia.rpc.berachain.com",
+      accounts: [PRIVATE_KEY],
+      blockGasLimit: 30000000000,
+    }
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY as string,
@@ -81,6 +92,22 @@ const config: HardhatUserConfig = {
           browserURL: "https://celo-sepolia.blockscout.com",
         },
       },
+      {
+        network: "berachain",
+        chainId: 80094,
+        urls: {
+          apiURL: "https://api.etherscan.io/v2/api?chainid=80094",
+          browserURL: "https://berascan.com",
+        },
+      },
+      {
+        network: "bepolia",
+        chainId: 80069,
+        urls: {
+          apiURL: "https://api.etherscan.io/v2/api?chainid=80069",
+          browserURL: "https://testnet.berascan.com",
+        },
+      }
     ],
   },
 };

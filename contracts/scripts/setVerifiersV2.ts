@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import * as dotenv from "dotenv";
-import { RegisterVerifierId, DscVerifierId } from "@selfxyz/common";
+import { RegisterVerifierId, DscVerifierId } from "../../common/src/constants/constants";
 import {
   getContractAbi,
   getDeployedAddresses,
@@ -22,7 +22,7 @@ const setVerifiers = {
 };
 
 const NETWORK = process.env.NETWORK;
-const RPC_URL = process.env.RPC_URL;
+const RPC_URL = process.env.NETWORK === "berachain" ? process.env.BERACHAIN_RPC_URL : process.env.BEPOLIA_RPC_URL;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 if (!NETWORK) {
@@ -35,7 +35,7 @@ const deployedAddresses = getDeployedAddresses(repoName);
 log.info(`Network: ${NETWORK}, Repo: ${repoName}`);
 
 try {
-  const hubABI = getContractAbi(repoName, "DeployHubV2#IdentityVerificationHubImplV2");
+  const hubABI = getContractAbi(repoName, "DeployHubV2#IdentityVerificationHubImplV2Small");
   const prefix = "DeployAllVerifiers";
 
   function getContractAddressByPartialName(partialName: string): string | undefined {

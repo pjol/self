@@ -9,7 +9,7 @@ dotenv.config();
 
 // Environment configuration
 const NETWORK = process.env.NETWORK || "localhost"; // Default to localhost
-const RPC_URL_KEY = NETWORK === "celo" ? "CELO_RPC_URL" : "CELO_SEPOLIA_RPC_URL";
+const RPC_URL_KEY = NETWORK === "berachain" ? "BERACHAIN_RPC_URL" : "BEPOLIA_RPC_URL";
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const SKIP_CSCA_UPDATE = process.env.SKIP_CSCA_UPDATE === "true";
 const CSCA_ROOT = process.env.CSCA_ROOT; // Allow manual CSCA root setting
@@ -19,6 +19,8 @@ const NETWORK_TO_CHAIN_ID: Record<string, string> = {
   localhost: "31337",
   celoSepolia: "11142220",
   celo: "42220",
+  berachain: "80094",
+  bepolia: "80069",
 };
 
 // Get chain ID from network name
@@ -79,7 +81,7 @@ try {
     }
 
     // Get hub address
-    const hubAddress = getContractAddressByExactName("DeployHubV2#IdentityVerificationHubImplV2");
+    const hubAddress = getContractAddressByExactName("DeployHubV2#IdentityVerificationHubImplV2Small");
     console.log("Hub address:", hubAddress);
 
     if (!hubAddress) {

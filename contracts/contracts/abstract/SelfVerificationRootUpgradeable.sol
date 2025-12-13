@@ -257,6 +257,14 @@ abstract contract SelfVerificationRootUpgradeable is Initializable, ContextUpgra
             return 0x0a782f7F9f8Aac6E0bacAF3cD4aA292C3275C6f2;
         }
 
+        if (chainId == 80064) {
+            return 0xe68c5e93a5Bb1D7276f1D981167a2231f1f81C47;
+        }
+
+        if (chainId == 80069) {
+            return 0xe68c5e93a5Bb1D7276f1D981167a2231f1f81C47;
+        }
+
         // For local/development networks or other chains, return zero address
         return address(0);
     }

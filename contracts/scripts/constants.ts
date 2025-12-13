@@ -18,11 +18,15 @@ export const NETWORK_TO_CHAIN_ID: Record<string, string> = {
   celo: "42220",
   mainnet: "42220",
   staging: "11142220",
+  berachain: "80094",
+  bepolia: "80069"
 };
 
 export const CHAIN_ID_TO_SAVED_REPO: Record<string, string> = {
   "42220": "prod",
   "11142220": "staging",
+  "80094": "chain-80094",
+  "80069": "chain-80069"
 };
 
 export const getChainId = (network: string): string => {
